@@ -1,0 +1,60 @@
+---
+- name: Update packages
+  apt:
+    upgrade: dist
+    update_cache: yes
+
+- name: Copy sshd_config file
+  copy:
+    src: "{{ sshd_config_filepath }}"
+    dest: /etc/ssh/sshd_config
+    backup: yes
+
+- name: Change port to 6522
+  lineinfile: 
+    path: /etc/ssh/sshd_config
+    regexp: "Port 22"
+    line: "Port 6522"
+    state: present
+
+- name: Restart sshd
+  service:
+    name: sshd
+    state: restarted
+
+- name: Copy logrotate file
+  copy:
+    src: "{{ logrotate_filepath }}" 
+    dest: /etc/logrotate.d/
+
+- name: Install packages
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ packages }}"
+
+- name: Add ansible-user with sudo persmission
+  user:
+    name: ansible-user
+    groups: sudo
+
+- name: Add normal users
+  user:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ users }}"
+
+- name: Change file permission for /etc/shadow
+  file:
+    path: /etc/shadow
+    state: file
+    mode: "0400"
+
+- name: Change file permission for /var/log/syslog
+  file:
+    path: /var/log/syslog
+    state: file
+    mode: "0600"
+

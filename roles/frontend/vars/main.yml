@@ -1,0 +1,9 @@
+---
+packages:
+  - apache2
+  - mysql-client
+  - php
+zip_filepath: /tmp/fefiles/frontend.zip
+zip_s3_filepath: s3://skillup-j.bolon-s3/frontend.zip
+
+# vars file for roles/frontend

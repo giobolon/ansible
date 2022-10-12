@@ -1,0 +1,13 @@
+---
+sshd_config_filepath: /etc/ssh/sshd_config
+logrotate_filepath: /etc/logrotate.conf
+packages:
+  - wget
+  - unzip
+  - curl
+  - git
+  - jq
+users:
+  - apple
+  - banana
+  - carrot
